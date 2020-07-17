@@ -17,6 +17,7 @@ const AddFishForm = ({ addFish }) => {
       image: imageRef.current.value,
     };
     addFish(fish);
+    event.currentTarget.reset();
   };
 
   return (
