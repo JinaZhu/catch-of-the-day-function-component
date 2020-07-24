@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import firebase, { database } from "firebase";
+import React, { useState, useEffect } from "react";
+import firebase from "firebase";
 import AddFishForm from "./AddFishForm";
 import EditFishForm from "./editFishForm";
 import Login from "./login";
@@ -13,9 +13,20 @@ const Inventory = ({
   deleteFish,
   storeId,
 }) => {
+  // states to track user and owner
   const [uid, setUid] = useState();
   const [owner, setOwner] = useState();
 
+  //check if we are already login
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        authHandler({ user });
+      }
+    });
+  }, []);
+
+  // match or assign storeId to user and set userid and owner for auth check
   const authHandler = async (authData) => {
     //1. look up the current store in the firebase database
     const store = await base.fetch(storeId, {
@@ -29,21 +40,33 @@ const Inventory = ({
     }
     setUid(authData.user.uid);
     setOwner(store.owner || authData.user.uid);
-    console.log(store);
-    console.log(authData);
   };
-
+  //login
   const authenticate = (provider) => {
     const authProvider = new firebase.auth[`${provider}AuthProvider`]();
     firebaseApp.auth().signInWithPopup(authProvider).then(authHandler);
   };
+  //logout
+  const logoutUser = async () => {
+    await firebase.auth().signOut();
+    setUid(null);
+    setOwner(null);
+  };
+
+  const logout = <button onClick={logoutUser}>Log Out!</button>;
 
   return (
     <div>
       {!uid && <Login authenticate={authenticate} />}
+      {uid !== owner && (
+        <div>
+          <p>Sorry you are not the owner!</p>
+        </div>
+      )}
       {uid && (
         <div className="inventory">
           <h2>Inventory</h2>
+          {logout}
           {Object.keys(fishes).map((key) => (
             <EditFishForm
               key={key}
