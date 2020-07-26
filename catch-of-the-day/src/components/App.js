@@ -121,7 +121,7 @@ class App extends React.Component {
 
 export default App;
 
-// import React, { useState, useEffect, useRef } from "react";
+// import React, { useState, useEffect } from "react";
 // import firebase from "firebase";
 
 // import Header from "./Header";
@@ -139,30 +139,20 @@ export default App;
 //   const [fishes, setFishes] = useState({});
 //   const [order, setOrder] = useState({});
 
+//   console.log(App);
+
 //   useEffect(() => {
-//     console.log("firebase", firebase);
-//     const db = firebase.firestore();
-//     const ref = db.collection(`${storeId}`).add({
-//       fishes,
+//     const ref = base.syncState(`${storeId}/fishes`, {
+//       context: {
+//         setState: ({ fishes }) => setFishes({ ...fishes }),
+//         state: { fishes },
+//       },
+//       state: "fishes",
 //     });
-
-//     // const ref = base.syncState(`${storeId}/fishes`, {
-//     //   context: {
-//     //     setState: ({ fishes }) => {
-//     //       console.log("fishes in set state", fishes);
-//     //       return setFishes({ ...fishes });
-//     //     },
-//     //     state: { fishes },
-//     //   },
-//     //   state: "fishes",
-//     // });
-
-//     console.log("ref", ref);
 //     return () => {
 //       base.removeBinding(ref);
 //     };
 //   }, []);
-//   console.log("fishes", fishes);
 
 //   const addFish = (fish) => {
 //     const newFishes = { ...fishes };

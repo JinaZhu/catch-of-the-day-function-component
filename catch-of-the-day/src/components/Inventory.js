@@ -14,8 +14,8 @@ const Inventory = ({
   storeId,
 }) => {
   // states to track user and owner
-  const [uid, setUid] = useState();
-  const [owner, setOwner] = useState();
+  const [uid, setUid] = useState("");
+  const [owner, setOwner] = useState("");
 
   //check if we are already login
   useEffect(() => {
@@ -27,6 +27,7 @@ const Inventory = ({
   }, []);
 
   // match or assign storeId to user and set userid and owner for auth check
+
   const authHandler = async (authData) => {
     //1. look up the current store in the firebase database
     const store = await base.fetch(storeId, {
